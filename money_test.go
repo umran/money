@@ -2,6 +2,8 @@ package money
 
 import (
 	"testing"
+
+	"github.com/umran/decimal"
 )
 
 func TestNew(t *testing.T) {
@@ -48,7 +50,7 @@ func TestSub(t *testing.T) {
 func TestMul(t *testing.T) {
 	m := New(100, USD)
 
-	result := m.Mul(0.3333333)
+	result := m.Mul(decimal.New(3333333, -7))
 
 	if result.Amount() != 33 {
 		t.Error("unexpected result")

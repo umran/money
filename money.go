@@ -1,16 +1,14 @@
 package money
 
 import (
-	"math/big"
 	"strconv"
-	"strings"
 
-	"github.com/cowriepayments/decimal"
+	"github.com/umran/decimal"
 )
 
 // Money represents an amount of some currency
 type Money struct {
-	amount   decimal.Decimal
+	amount   *decimal.Decimal
 	currency *Currency
 }
 
@@ -40,10 +38,10 @@ func (m1 *Money) Sub(m2 *Money) (*Money, error) {
 	}, nil
 }
 
-// Mul performs multipliciation with a decimal (supplied as a float64) and returns a new Money instance
-func (m1 *Money) Mul(factor float64) *Money {
+// Mul performs multipliciation with a decimal (supplied as a value and exponent) and returns a new Money instance
+func (m1 *Money) Mul(factor *decimal.Decimal) *Money {
 	return &Money{
-		amount:   m1.amount.Mul(decimal.NewFromFloat(factor)),
+		amount:   m1.amount.Mul(factor),
 		currency: m1.currency,
 	}
 }
@@ -56,8 +54,8 @@ func (m1 *Money) Currency() *Currency {
 // Amount returns the amount in minor units (cents) if the exponent is greater than 0
 // else returns the amount in major units
 func (m1 *Money) Amount() int64 {
-	s := m1.amount.StringFixedBank(int32(m1.currency.exponent))
-	s = strings.Replace(s, ".", "", 1)
+	s := m1.amount.StringFixedBank(int32(0))
+	// s = strings.Replace(s, ".", "", 1)
 
 	i, _ := strconv.ParseInt(s, 10, 64)
 
@@ -78,7 +76,7 @@ func assertIdenticalCurrency(m1, m2 *Money) error {
 // New returns a new Money instance from the provided amount (in minor units) and currency
 func New(amount int64, currency *Currency) *Money {
 	return &Money{
-		amount:   decimal.NewFromBigInt(big.NewInt(amount), int32(-1*currency.exponent)),
+		amount:   decimal.New(amount, int32(0)),
 		currency: currency,
 	}
 }
