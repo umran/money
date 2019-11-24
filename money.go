@@ -40,10 +40,10 @@ func (m1 *Money) Sub(m2 *Money) (*Money, error) {
 	}, nil
 }
 
-// Mul performs multipliciation with a decimal instance and returns a new Money instance
-func (m1 *Money) Mul(factor decimal.Decimal) *Money {
+// Mul performs multipliciation with a decimal (supplied as a string) and returns a new Money instance
+func (m1 *Money) Mul(factor float64) *Money {
 	return &Money{
-		amount:   m1.amount.Mul(factor),
+		amount:   m1.amount.Mul(decimal.NewFromFloat(factor)),
 		currency: m1.currency,
 	}
 }

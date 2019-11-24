@@ -2,8 +2,6 @@ package money
 
 import (
 	"testing"
-
-	"github.com/cowriepayments/decimal"
 )
 
 func TestNew(t *testing.T) {
@@ -49,9 +47,8 @@ func TestSub(t *testing.T) {
 
 func TestMul(t *testing.T) {
 	m := New(100, USD)
-	factor, _ := decimal.NewFromString("0.3333333")
 
-	result := m.Mul(factor)
+	result := m.Mul(0.3333333)
 
 	if result.Amount() != 33 {
 		t.Error("unexpected result")
